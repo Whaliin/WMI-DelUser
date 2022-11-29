@@ -1,4 +1,29 @@
 #echo off
+<#
+    Description:
+        Automatically removes userprofiles the same way that Windows would, using the Win32_UserProfile (WMI instance)
+        This means that the next time the user logs on they will not get an error, as opposed to just deleting the folder on disk
+
+    Parameters:
+        SpaceLimit will remove until you reach the desired free space threshold on the disk 
+        "-SpaceLimit 100" will delete userprofiles until you reach 100GB of free space on disk
+
+        MonthCutoff will remove any userprofiles that havent been used since todays date minus months
+        "-MonthCutoff 6" will remove userprofiles that have not been used in the last six months
+
+        "-SpaceLimit 100 -MonthCutoff 6" will remove userprofiles that have not been used in the last six months, until you have 100GB of free space on disk
+
+        WhitelistUser will whitelist any matching username from deletion
+        "-WhitelistUser USDOEJ" will not delete the USDOEJ user regardless of space or month limitations. Useful for admin profiles, service accounts or top users.
+        If you are going to use this for an organization you can also directly change the $WhitelistUsers < (added s) so you don't have to check this switch every time.
+
+        ProfileLimit will only remove x amount of profiles (used for testing)
+        "-ProfileLimit 5" will only remove the first 5 found profiles, in arbitrary order
+
+        The DebugMode switch will enable "safe" mode which will bypass admin checks and not actually delete any userprofiles.
+
+        The Verbose switch will enable verbose logging for some commands (WMI related commands)
+#>
 param (
     [Alias("L", "Log")][switch]$Verbose, 
     [Alias("ML")][int]$MonthCutoff,
