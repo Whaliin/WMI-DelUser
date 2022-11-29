@@ -97,7 +97,7 @@ $VerbosePreference = switch ($Verbose) {
 }
 
 #whitelist some standard directories
-$WhitelistUsers = ("")
+$WhitelistUsers = @()
 
 #process parameters
 if ($null -ne $WhitelistUser) {
